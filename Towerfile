@@ -2,5 +2,7 @@
 name = "linkedin-profile-scraper"
 script = "src/scrape.py"
 source = [
+  "src/*.py",
   "src/**/*",
+  "requirements.txt"
 ]
