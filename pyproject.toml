@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "tower"
+version = "0.1.0"
+description = ""
+authors = ["codingcyclist <mail@codingcyclist.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+dlt = {version = "^1.0.0", extras = ["duckdb", "bigquery"]}
+pandas = "^2.2.3"
+loguru = "^0.7.2"
+python-dotenv = "^1.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pandas-stubs = "^2.2.2.240909"
+types-requests = "^2.32.0.20240914"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
