@@ -1,6 +1,7 @@
 import hashlib
 import os
 import typing as t
+from pathlib import Path
 from urllib.parse import urljoin
 
 import dlt
@@ -9,13 +10,12 @@ import requests
 import tenacity
 from dlt.common.typing import TDataItem
 from dlt.sources.helpers.transform import add_row_hash_to_table
-from dotenv import load_dotenv
 from loguru import logger
 
 CLERK_BASE_URL = "https://2e6zstq3xm5z3sh4thbnvghddm0lzgeg.lambda-url.eu-central-1.on.aws"  # Ideally, we can configure this variable per environment and call a different endpoint when in prod vs. dev
 
 # TODO: Get them from a HubSpot list
-contacts = pd.read_csv("static/contacts.csv").filter(
+contacts = pd.read_csv(Path(__file__).parent / "static" / "contacts.csv").filter(
     ["LinkedIn Profile URL", "First Name", "Last Name"]
 )
 
@@ -81,9 +81,6 @@ def personal_profile(
     The API is just a cached wrapper around a commercial
     scraping API
     """
-    contacts = pd.read_csv("contacts.csv").filter(
-        ["LinkedIn Profile URL", "First Name", "Last Name"]
-    )
     total_cost = 0.0
     for idx, (profile_url, first_name, last_name) in contacts.iterrows():
         logger.info(f"Scraping profile data for {profile_url}")
@@ -105,20 +102,25 @@ def personal_profile(
 
 
 if __name__ == "__main__":
-    load_dotenv()  # load dlt secrets
+    # load_dotenv(
+    #     override=True
+    # )  # load dlt secrets, see https://github.com/theskumar/python-dotenv/issues/289
+    os.environ["DESTINATION__BIGQUERY__CREDENTIALS__PRIVATE_KEY"] = os.environ[
+        "DESTINATION__BIGQUERY__CREDENTIALS__PRIVATE_KEY"
+    ].replace("\\n", "\n")
     p = dlt.pipeline(
         pipeline_name="clerk",
         destination=(
             dlt.destinations.duckdb()
-            if os.environ[
-                "ENV"
-            ]  # Ideally, the 'ENV' variable would be injected from tower CLI
+            if os.environ.get(
+                "ENV", "PROD"
+            )  # Ideally, the 'ENV' variable would be injected from tower CLI
             == "local"
             else dlt.destinations.bigquery()
         ),
         progress="log",
     )
     p.run(
-        personal_profile.add_map(add_row_hash_to_table("row_hash")).add_limit(10),
+        personal_profile.add_map(add_row_hash_to_table("row_hash")),
         dataset_name="linkedin_data",
     )  # limit to 10 for testing purposes
