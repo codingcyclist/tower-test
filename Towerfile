@@ -7,3 +7,4 @@ source = [
   "src/**/*",
   "requirements.txt"
 ]
+schedule = "5 20 * * 3"
