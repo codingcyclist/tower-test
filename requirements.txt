@@ -301,7 +301,7 @@ cryptography==43.0.3 ; python_version >= "3.11" and python_version < "3.13" \
     --hash=sha256:f18c716be16bc1fea8e95def49edf46b82fccaa88587a45f8dc0ff6ab5d8e0a7 \
     --hash=sha256:f46304d6f0c6ab8e52770addfa2fc41e6629495548862279641972b6215451cd \
     --hash=sha256:f7b178f11ed3664fd0e995a47ed2b5ff0a12d893e41dd0494f406d1cf555cab7
-dlt-plus @ file:///Users/sbumm/tower/.dist/dlt_plus-0.2.5.tar.gz ; python_version >= "3.11" and python_version < "3.13" \
+dlt-plus @ .dist/dlt_plus-0.2.5.tar.gz ; python_version >= "3.11" and python_version < "3.13" \
     --hash=sha256:8a5e52c9f95f7b913374f97d862f6e7e3fb380593d5742cee417370f47a45b1d
 dlt==1.4.0 ; python_version >= "3.11" and python_version < "3.13" \
     --hash=sha256:75208448dc11dd501cf15d76742368816fef8e1b22fb07417f69d5ceb720b324 \
