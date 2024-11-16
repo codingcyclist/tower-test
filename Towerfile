@@ -1,10 +1,13 @@
 [app]
 name = "linkedin-profile-scraper"
-script = "src/scrape.py"
+script = "entrypoint.sh"
 source = [
-  "src/*.py",
-  "src/static/*.csv",
-  "src/**/*",
-  "requirements.txt"
+  "lake/**/*.py",
+  "lake/**/*.yml",
+  "lake/src/static/*.csv",
+  "lake/src/**/*",
+  ".dist/dlt_plus-0.2.5.tar.gz",
+  "requirements.txt",
+  "entrypoint.sh"
 ]
-schedule = "5 20 * * 3"
+

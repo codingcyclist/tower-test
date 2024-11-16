@@ -54,12 +54,13 @@ def get_profile_data(
     )
     if not res.ok:
         if res.status_code in (422, 404):
-            # invalid profile URL or profile URL not found
-            return {}, False
-        raise Exception(
-            f"Failed to pull profile data for {profile_url} "
-            f"| status: {res.status_code} | {res.text}"
-        )
+            logger.warning(f"Invalid request for '{profile_url}': {res.text}")
+        if res.status_code >= 500:
+            logger.warning(f"Server error for '{profile_url}': {res.text}")
+        else:
+            logger.warning(f"Unknown error for '{profile_url}': {res.text}")
+        return {}, False
+
     return res.json(), res.headers["x-cache"] == "HIT"
 
 
@@ -73,7 +74,7 @@ def get_profile_data(
     },
 )
 def personal_profile(
-    clerk_api_key: str = dlt.secrets.value,
+    clerk_api_key: str
 ) -> t.Generator[t.Dict[str, t.Any], None, None]:
     """
     DLT resource to scrape linkedin profile data
@@ -96,31 +97,31 @@ def personal_profile(
                 "education": profile_data["education"],
                 "work_experience": profile_data["work_experience"],
             }
-        else:
-            logger.warning(f"No profile data found for '{profile_url}'")
+
     logger.info(f"Total cost of scraping linkedin: {total_cost:.2f}€")
+
+@dlt.source(
+    name="linkedin_data"
+)
+def linkedin_data( clerk_api_key: str = dlt.secrets.value):
+    return [
+        personal_profile(clerk_api_key=clerk_api_key).add_map(add_row_hash_to_table("row_hash")).add_limit(10)
+    ]
 
 
 if __name__ == "__main__":
     # load_dotenv(
     #     override=True
     # )  # load dlt secrets, see https://github.com/theskumar/python-dotenv/issues/289
-    os.environ["DESTINATION__BIGQUERY__CREDENTIALS__PRIVATE_KEY"] = os.environ[
-        "DESTINATION__BIGQUERY__CREDENTIALS__PRIVATE_KEY"
-    ].replace("\\n", "\n")
+    print("Hello world", os.environ["DESTINATION__WAREHOUSE__CREDENTIALS__PRIVATE_KEY"])
+    os.environ["DESTINATION__BIGQUERY__CREDENTIALS__PRIVATE_KEY"] = os.environ["DESTINATION__WAREHOUSE__CREDENTIALS__PRIVATE_KEY"]
+    
     p = dlt.pipeline(
         pipeline_name="clerk",
-        destination=(
-            dlt.destinations.duckdb()
-            if os.environ.get(
-                "ENV", "PROD"
-            )  # Ideally, the 'ENV' variable would be injected from tower CLI
-            == "local"
-            else dlt.destinations.bigquery()
-        ),
+        destination=dlt.destinations.bigquery(),
         progress="log",
     )
     p.run(
-        personal_profile.add_map(add_row_hash_to_table("row_hash")),
+        linkedin_data().with_resources("personal_profile"),
         dataset_name="linkedin_data",
     )  # limit to 10 for testing purposes
