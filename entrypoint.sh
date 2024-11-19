@@ -4,8 +4,11 @@
 # environment in the Tower runtime environment at execution time.
 source .venv/bin/activate
 
+export PYTHONPATH=$(pwd)
+echo "username $(uname)"
+
 cd lake
 dlt project clean
 dlt pipeline -l
-dlt pipeline linkedin_profiles run
-dlt dataset linkedin_profiles info
+dlt pipeline linear run
+dlt dataset linear info

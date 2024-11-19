@@ -24,6 +24,7 @@ dlt = "^1.4.0"
 [tool.poetry.group.dev.dependencies]
 pandas-stubs = "^2.2.2.240909"
 types-requests = "^2.32.0.20240914"
+types-python-dateutil = "^2.9.0.20241003"
 
 
 [tool.poetry.group.local.dependencies]

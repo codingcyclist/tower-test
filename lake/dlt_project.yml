@@ -1,11 +1,7 @@
-# top level entities belong to default profile (dev) which is intended to be used in local development
-
 sources:
-  linkedin:
-  # how can I restrict a source to only one resource?
-    type: lake.src.scrape.linkedin_data
-    with_args:
-      max_table_nesting: 1
+  linear:
+    # how can I restrict a source to only one resource?
+    type: lake.src.pipelines.linear.source.linear
 
 destinations:
   warehouse:
@@ -13,33 +9,36 @@ destinations:
     credentials: # -> injected via env variables
 
 datasets:
-  # dataset with raw data
-  linkedin_profiles:
-    # "on":
-    #   - warehouse
-  # reports_dataset:
-  #   "on":
-  #     - warehouse
+  linear:
 
 pipelines:
-  linkedin_profiles:
-    source: linkedin
+  linear:
+    source: linear
     destination: warehouse
-    dataset_name: linkedin_profiles
+    dataset_name: linear
     progress: log
 
-
 profiles:
-  # production profile using s3 and snowflake
-  prod: &prod_profile
+  prod:
     destinations:
       bq:
         type: bigquery
         credentials: # injected via env variables
-  
-  # TODO: move test profiles to a separate file that is included from test folder
-  local: &local_profile
+    sources:
+      linear:
+        start_date: "2024-11-01"
+    runtime:
+      log_level: INFO
+  dev:
     destinations:
       warehouse:
-        type: duckdb
-        credentials: ${tmp_dir}warehouse.db
+        type: filesystem
+        bucket_url: ${tmp_dir}
+    sources:
+      linear:
+        start_date: "2024-11-01"
+    runtime:
+      log_level: DEBUG
+    normalize:
+      data_writer:
+        disable_compression: TRUE
