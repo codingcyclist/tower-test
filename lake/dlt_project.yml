@@ -1,6 +1,5 @@
 sources:
   linear:
-    # how can I restrict a source to only one resource?
     type: lake.src.pipelines.linear.source.linear
 
 destinations:
@@ -16,7 +15,7 @@ pipelines:
     source: linear
     destination: warehouse
     dataset_name: linear
-    progress: log
+    progress: tqdm
 
 profiles:
   prod:
@@ -36,7 +35,7 @@ profiles:
         bucket_url: ${tmp_dir}
     sources:
       linear:
-        start_date: "2024-11-01"
+        start_date: "2024-11-20"
     runtime:
       log_level: DEBUG
     normalize:

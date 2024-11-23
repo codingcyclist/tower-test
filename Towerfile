@@ -1,13 +1,16 @@
 [app]
-name = "linkedin-profile-scraper"
+name = "portable-data-lake"
 script = "entrypoint.sh"
 source = [
-  "lake/**/*.py",
-  "lake/**/*.yml",
-  "lake/src/static/*.csv",
-  "lake/src/**/*",
-  ".dist/dlt_plus-0.2.5.tar.gz",
-  "requirements.txt",
-  "entrypoint.sh"
+    "lake/**/*.py",
+    "lake/**/*.yml",
+    "lake/src/static/*.csv",
+    "lake/src/**/*",
+    ".dist/dlt_plus-0.2.5.tar.gz",
+    "requirements.txt",
+    "entrypoint.sh",
 ]
 
+[[parameters]]
+name = "LOCAL_STORAGE_VOLUME"
+default = "~/tower/_storage"

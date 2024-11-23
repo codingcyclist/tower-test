@@ -55,10 +55,6 @@ def linear(
         "updatedAt", initial_value=parse(start_date).isoformat()
     )
     return [
-        projects_resource(
-            api_key,
-            resource_updated_at_lbound,
-        ),
         issues_resource(
             api_key,
             resource_updated_at_lbound,
