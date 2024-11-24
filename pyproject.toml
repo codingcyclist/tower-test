@@ -29,7 +29,7 @@ types-python-dateutil = "^2.9.0.20241003"
 
 
 [tool.poetry.group.local.dependencies]
-dlt-plus = {path = ".dist/dlt_plus-0.2.5.tar.gz"}
+dlt-plus = {path = ".dist/dlt_plus-0.2.6.tar.gz"}
 
 [build-system]
 requires = ["poetry-core"]

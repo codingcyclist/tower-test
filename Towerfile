@@ -6,7 +6,7 @@ source = [
     "lake/**/*.yml",
     "lake/src/static/*.csv",
     "lake/src/**/*",
-    ".dist/dlt_plus-0.2.5.tar.gz",
+    ".dist/dlt_plus-0.2.6.tar.gz",
     "requirements.txt",
     "entrypoint.sh",
 ]

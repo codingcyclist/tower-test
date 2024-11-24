@@ -35,7 +35,6 @@ def _fetch_linear_issues(
             ) {{
                 nodes {{
                     title
-                    priority
                     description
                     creator {{
                         name

@@ -83,4 +83,4 @@ yarl==1.18.0 ; python_version >= "3.11" and python_version < "3.13"
 #
 # Local dependencies added manually
 #
-./.dist/dlt_plus-0.2.5.tar.gz
+./.dist/dlt_plus-0.2.6.tar.gz
