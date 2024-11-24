@@ -3,10 +3,16 @@
 cd lake
 dlt project clean
 dlt pipeline -l
-if [ "$TOWER_ENVIRONMENT" = local ]; then
-    dlt pipeline --profile=dev linear run
+if [ "$RESOURCE" = all ]; then
+    export RESOURCE_CMD=""
 else
-    dlt pipeline --profile=prod linear run
+    export RESOURCE_CMD=" --resource=$RESOURCE"
+fi
+
+if [ "$TOWER_ENVIRONMENT" = local ]; then
+    dlt pipeline --profile=dev linear run$RESOURCE_CMD
+else
+    dlt pipeline --profile=prod linear run$RESOURCE_CMD
 fi
 dlt dataset linear info
 

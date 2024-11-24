@@ -14,3 +14,7 @@ source = [
 [[parameters]]
 name = "LOCAL_STORAGE_VOLUME"
 default = "~/tower/_storage"
+
+[[parameters]]
+name = "RESOURCE"
+default = "all"
